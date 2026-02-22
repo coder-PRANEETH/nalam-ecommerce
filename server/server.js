@@ -7,10 +7,11 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const { User, Product } = require("./schema");
+serverurl = "mongodb://localhost:27017/test";
 
 const app = express();
-const PORT = 3000;
-const MONGO_URL = "mongodb://localhost:27017/test";
+const PORT = process.env.PORT || 4000 ;
+const MONGO_URL = process.env.MONGO_URL || "mongodb://localhost:27017/test";
 const JWT_SECRET = process.env.JWT_SECRET || "nalam_jwt_secret";
 
 // ─── Email Configuration (Gmail SMTP) ──────────────────────────────────────
