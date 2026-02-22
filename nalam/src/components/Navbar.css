@@ -1,0 +1,364 @@
+/* ===== Navbar ===== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: 64px;
+  padding: 0 2rem;
+  color: black;
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+}
+
+svg{
+  stroke: darkgreen;
+}
+
+/* ===== Logo ===== */
+.navbar-logo {
+  flex-shrink: 0;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #000000, #a78bfa);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #000000;
+  letter-spacing: 0.5px;
+}
+
+.logo-link:hover .logo-icon {
+  background: linear-gradient(135deg, #535bf2, #8b5cf6);
+}
+
+.logo-link:hover .logo-text {
+  color: #a78bfa;
+}
+
+/* ===== Search Bar ===== */
+.navbar-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+form{
+  width: 100%;
+}
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  background: rgba(69, 94, 236, 0.213);
+  border: 1px solid rgba(0, 0, 0, 0.239);
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  color: #000000;
+}
+
+.search-input::placeholder {
+  color: #000000aa;
+}
+
+.search-input:focus {
+  background: rgba(178, 178, 178, 0.266);
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.18);
+}
+
+/* ===== Search Suggestions Dropdown ===== */
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background-color: #f9fafb;
+}
+
+.suggestion-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.suggestion-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestion-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestion-price {
+  font-size: 13px;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.search-wrapper {
+  position: relative;
+}
+
+/* ===== Actions (Buttons + Profile) ===== */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* ===== Nav Buttons ===== */
+.nav-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0.4rem 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: rgb(16, 69, 126);
+  font-size: 0.7rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  
+  letter-spacing: 0.3px;
+}
+
+.nav-btn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.nav-btn:hover {
+  background: rgba(100, 108, 255, 0.12);
+  color: #a78bfa;
+  border-color: transparent;
+}
+
+.nav-btn:focus {
+  outline: none;
+}
+
+/* Cart badge */
+.cart-btn {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  width: 13px;
+  height: 13px;
+  background: #fa8ef4;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ===== Profile ===== */
+.navbar-profile {
+  margin-left: 0.5rem;
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0rem 0rem;
+
+  border: 2px solid rgba(0, 0, 0, 0.995);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+
+
+.profile-btn:focus {
+  outline: none;
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.navbar-logo{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.6s ease;
+}
+.navbar-logo img{
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.navbar-logo:hover {
+  transform: scale(1.2);
+}
+
+.profile-avatar svg {
+  width: 18px;
+  height: 18px;
+  color: #fff;
+}
+.profile-avatar:hover {
+  background: rgba(100, 108, 255, 0.12);
+}
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #000000;
+  letter-spacing: 0.5px;
+}
+.logo-link:hover .logo-text {
+  color: greenyellow;
+}
+.navbar-profile{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ===== Page offset so content doesn't sit under the fixed navbar ===== */
+.navbar-offset {
+  height: 56px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 1rem;
+    gap: 0.75rem;
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .navbar-search {
+    max-width: none;
+  }
+
+  .nav-btn span {
+    display: none;
+  }
+
+  .nav-btn {
+    padding: 0.45rem;
+  }
+
+  .nav-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-search {
+    display: none;
+  }
+}

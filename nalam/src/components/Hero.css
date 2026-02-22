@@ -1,0 +1,252 @@
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 85vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.hero-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  font-size: 1.2rem;
+  color: #999;
+}
+
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+/* Creative zoom + rotation + blur animations */
+@keyframes zoomRotateBlurRight {
+  from {
+    opacity: 0;
+    transform: scale(1.3) rotate(8deg) translateX(50px);
+    filter: blur(15px);
+  }
+  50% {
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg) translateX(0);
+    filter: blur(0px);
+  }
+}
+
+@keyframes zoomRotateBlurLeft {
+  from {
+    opacity: 0;
+    transform: scale(1.3) rotate(-8deg) translateX(-50px);
+    filter: blur(15px);
+  }
+  50% {
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg) translateX(0);
+    filter: blur(0px);
+  }
+}
+
+.hero-image.slide-in-right {
+  animation: zoomRotateBlurRight 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hero-image.slide-in-left {
+  animation: zoomRotateBlurLeft 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hero-carousel:hover .hero-image {
+  transform: scale(1.05);
+}
+
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+  padding: 2rem;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.hero-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4f8ef7;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-cta {
+  align-self: flex-start;
+  padding: 0.75rem 1.5rem;
+  background: black;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hero-cta:hover {
+    background: #263a2c;
+    box-shadow: 0 0px 16px rgba(255, 255, 255, 0.846);
+}
+
+.hero-cta:active {
+  transform: scale(0.98);
+}
+
+/* Carousel indicators */
+.hero-indicators {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  padding: 0;
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.2);
+}
+
+.indicator.active {
+  background: #fff;
+  transform: scale(1.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero {
+    height: 300px;
+  }
+
+  .hero-overlay {
+    padding: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-price {
+    font-size: 1.2rem;
+  }
+
+  .hero-cta {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+  }
+
+  .hero-indicators {
+    bottom: 1rem;
+  }
+
+  .indicator {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 200px;
+  }
+
+  .hero-overlay {
+    padding: 1rem;
+  }
+
+  .hero-title {
+    font-size: 1.2rem;
+  }
+
+  .hero-price {
+    font-size: 1rem;
+  }
+
+  .hero-cta {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .hero-indicators {
+    gap: 0.3rem;
+    bottom: 0.75rem;
+  }
+
+  .indicator {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+.hero-image{
+  aspect-ratio: 1/1;
+  width: 100%;
+  
+
+}

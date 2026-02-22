@@ -1,0 +1,193 @@
+/* ===== Card ===== */
+.card {
+  display: flex;
+  padding: 5px;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+  transition: padding 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  padding: 0%;
+  box-shadow: 0 8px 24px rgb(26, 190, 48);
+}
+
+/* ===== Image ===== */
+.card-image-wrapper {
+  position: relative;
+  border-radius: 10px;
+  width: 50%;
+  margin: auto;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.card:hover .rota {
+  transform: scale(1.05) rotateZ(45deg);
+}
+
+/* Badge */
+.card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.badge-sale        { background: #ef4444; }
+.badge-new         { background: #10b981; }
+.badge-bestseller  { background: #f59e0b; }
+.badge-top-rated   { background: #6366f1; }
+
+/* Wishlist button */
+
+/* ===== Body ===== */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0.85rem 1rem 1rem;
+}
+
+.card-category {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #177e2d;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.card-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== Stars ===== */
+.card-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.star {
+  width: 13px;
+  height: 13px;
+}
+
+.star.filled polygon {
+  fill: #f5f50b;
+  stroke: #e9f50b;
+}
+
+
+
+.star.empty polygon {
+  fill: none;
+  stroke: #d1d5db;
+}
+
+.rating-value {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #374151;
+  margin-left: 3px;
+}
+
+.card-reviews {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-top: -2px;
+}
+
+/* ===== Footer ===== */
+.card-footer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1em;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.card-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.card-price {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.card-original {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.card-discount {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #ef4444;
+}
+
+/* Add button */
+.card-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 16px;
+  background: #111827;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  flex-shrink: 0;
+  transition: all 0.22s ease;
+}
+
+
+
+.card-add-btn:hover {
+  background: white;
+  color: #111827;
+  border: 1px solid #111827;
+  box-shadow: inset 0 0 10px 2px #111827;
+}
+
+

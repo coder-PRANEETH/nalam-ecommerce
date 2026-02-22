@@ -1,0 +1,296 @@
+.product-page{
+    width: 100vw;
+    height: calc(100vh-60px);
+    display: flex;
+}
+.product-view{
+    width: 70%;
+}
+.checkout{
+    width: 30%;
+    height: fit-content;
+    padding: 1.5rem 1.5rem;
+    background: #f9fafb;
+    border-left: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Title */
+.checkout-title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 1.25rem;
+}
+
+/* Items */
+.checkout-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.checkout-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.checkout-item-img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+.checkout-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.checkout-item-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #111827;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.checkout-item-variant {
+    font-size: 0.73rem;
+    color: #6b7280;
+}
+
+.checkout-item-price {
+    font-size: 1.58rem;
+    font-weight: 700;
+    color: #111827;
+    flex-shrink: 0;
+}
+
+/* Divider */
+.checkout-divider {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 1rem 0;
+}
+
+/* Promo */
+.checkout-promo {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.checkout-promo-input {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-family: inherit;
+    outline: none;
+    background: #fff;
+    color: #111827;
+    transition: border-color 0.2s;
+}
+
+.checkout-promo-input:focus {
+    border-color: #6366f1;
+}
+
+.checkout-promo-btn {
+    padding: 0.5rem 1rem;
+    background: #111827;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: inherit;
+}
+
+.checkout-promo-btn:hover {
+    background: #374151;
+}
+
+/* Breakdown rows */
+.checkout-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.checkout-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #374151;
+}
+
+.checkout-discount {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.checkout-free {
+    color: #10b981;
+    font-weight: 600;
+}
+
+/* Total */
+.checkout-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1.25rem;
+}
+
+/* CTA button */
+.checkout-button {
+    width: 100%;
+    padding: 0.8rem;
+    background: #111827;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: inherit;
+}
+
+.checkout-button:hover {
+    background: #1f2937;
+}
+
+/* Secure badge */
+.checkout-secure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin: 0.85rem 0 0;
+}
+
+.checkout-secure svg {
+    width: 13px;
+    height: 13px;
+    stroke: #9ca3af;
+}
+
+/* ===== Delivery Address ===== */
+.checkout-address {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.checkout-address-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.checkout-address-header svg {
+    width: 16px;
+    height: 16px;
+    stroke: #6366f1;
+    flex-shrink: 0;
+}
+
+.checkout-address-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+    flex: 1;
+}
+
+.checkout-address-edit {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6366f1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.checkout-address-edit:hover {
+    color: #4f46e5;
+}
+
+.checkout-address-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.checkout-address-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.25rem;
+}
+
+.checkout-address-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #6366f1;
+    background: #eef2ff;
+    border-radius: 20px;
+    padding: 2px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.checkout-address-line {
+    font-size: 0.82rem;
+    color: #4b5563;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.checkout-address-phone {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    color: #4b5563;
+    margin: 0.35rem 0 0;
+}
+
+.checkout-address-phone svg {
+    width: 13px;
+    height: 13px;
+    stroke: #6b7280;
+    flex-shrink: 0;
+}
