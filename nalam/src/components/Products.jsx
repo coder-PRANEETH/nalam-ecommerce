@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
+import Loading from "./Loading";
 import "./Products.css";
 
 function Products({ searchQuery = "" }) {
@@ -7,7 +8,7 @@ function Products({ searchQuery = "" }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch("http://localhost:3000/products")
+    fetch("https://nalam-grocery.onrender.com/products")
     .then((res) => {
       if (!res.ok) throw new Error("Failed to fetch products");
       return res.json();
@@ -31,7 +32,7 @@ function Products({ searchQuery = "" }) {
     }, []);
    
 
-  if (loading) return <p className="products-status">Loading products...</p>;
+  if (loading) return <Loading />;
   if (error) return <p className="products-status">Error: {error}</p>;
 
   const filteredProducts =

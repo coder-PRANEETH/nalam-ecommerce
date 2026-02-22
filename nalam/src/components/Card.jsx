@@ -43,7 +43,7 @@ function Card({ product }) {
     setIsAdding(true)
 
     try {
-      const res = await fetch('http://localhost:3000/user/cart', {
+      const res = await fetch('https://nalam-grocery.onrender.com/user/cart', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -41,7 +41,7 @@ export default function ForgotPassword() {
 
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3000/auth/forgot-password/send-otp', {
+      const res = await fetch('https://nalam-grocery.onrender.com/auth/forgot-password/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -80,7 +80,7 @@ export default function ForgotPassword() {
 
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3000/auth/forgot-password/verify-otp', {
+      const res = await fetch('https://nalam-grocery.onrender.com/auth/forgot-password/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp }),
@@ -123,7 +123,7 @@ export default function ForgotPassword() {
 
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3000/auth/forgot-password/reset-password', {
+      const res = await fetch('https://nalam-grocery.onrender.com/auth/forgot-password/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, resetToken, newPassword }),

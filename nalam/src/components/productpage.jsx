@@ -16,7 +16,7 @@ export default function ProductPage() {
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
-      fetch('http://localhost:3000/user', {
+      fetch('https://nalam-grocery.onrender.com/user', {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then(res => res.ok ? res.json() : null)

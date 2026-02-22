@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Loading from './Loading'
 import './Hero.css'
 
 export default function Hero() {
@@ -11,7 +12,7 @@ export default function Hero() {
 
   // Fetch products on mount
   useEffect(() => {
-    fetch('http://localhost:3000/products')
+    fetch('https://nalam-grocery.onrender.com/products')
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch products')
         return res.json()
@@ -38,10 +39,14 @@ export default function Hero() {
     return () => clearInterval(interval)
   }, [products.length, currentIndex])
 
-  if (loading || products.length === 0) {
+  if (loading) {
+    return <Loading />
+  }
+
+  if (products.length === 0) {
     return (
       <section className="hero">
-        <div className="hero-placeholder">Loading...</div>
+        <div className="hero-placeholder">No products available</div>
       </section>
     )
   }

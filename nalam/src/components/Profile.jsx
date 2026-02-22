@@ -4,6 +4,7 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 import Popup from './Popup'
 import AddressModal from './AddressModal'
+import Loading from './Loading'
 import './Profile.css'
 
 const STATUS_COLOR = {
@@ -40,7 +41,7 @@ export default function Profile() {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    fetch('http://localhost:3000/user', {
+    fetch('https://nalam-grocery.onrender.com/user', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -83,7 +84,7 @@ export default function Profile() {
     setSaving(true)
 
     try {
-      const res = await fetch('http://localhost:3000/user', {
+      const res = await fetch('https://nalam-grocery.onrender.com/user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +125,7 @@ export default function Profile() {
     const updatedAddresses = user.addresses.filter((_, idx) => idx !== addressIndex)
 
     try {
-      const res = await fetch('http://localhost:3000/user', {
+      const res = await fetch('https://nalam-grocery.onrender.com/user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +158,7 @@ export default function Profile() {
 
     const token = localStorage.getItem('token')
     try {
-      const res = await fetch('http://localhost:3000/user', {
+      const res = await fetch('https://nalam-grocery.onrender.com/user', {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -183,14 +184,7 @@ export default function Profile() {
     }
   }
 
-  if (loading) return (
-    <>
-      <Navbar />
-      <div className="navbar-offset" />
-      <p style={{ textAlign: 'center', padding: '4rem' }}>Loading profile...</p>
-      <Footer />
-    </>
-  )
+  if (loading) return <Loading />
 
   if (error) return (
     <>

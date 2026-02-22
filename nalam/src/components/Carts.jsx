@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import Popup from './Popup'
+import Loading from './Loading'
 import './Carts.css'
 
 export default function Carts() {
@@ -20,13 +21,13 @@ export default function Carts() {
   useEffect(() => {
     const token = localStorage.getItem('token')
     Promise.all([
-      fetch('http://localhost:3000/user', {
+      fetch('https://nalam-grocery.onrender.com/user', {
         headers: { Authorization: `Bearer ${token}` },
       }).then(r => {
         if (!r.ok) throw new Error('Failed to fetch user')
         return r.json()
       }),
-      fetch('http://localhost:3000/products').then(r => {
+      fetch('https://nalam-grocery.onrender.com/products').then(r => {
         if (!r.ok) throw new Error('Failed to fetch products')
         return r.json()
       }),
@@ -93,7 +94,7 @@ export default function Carts() {
         _id: item.cartItemId,
       }))
 
-      const res = await fetch('http://localhost:3000/user', {
+      const res = await fetch('https://nalam-grocery.onrender.com/user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -126,14 +127,7 @@ export default function Carts() {
 
   const total = items.reduce((sum, item) => sum + item.price * item.qty, 0)
 
-  if (loading) return (
-    <>
-      <Navbar />
-      <div className="navbar-offset" />
-      <p style={{ textAlign: 'center', padding: '4rem' }}>Loading cart...</p>
-      <Footer />
-    </>
-  )
+  if (loading) return <Loading />
 
   if (error) return (
     <>

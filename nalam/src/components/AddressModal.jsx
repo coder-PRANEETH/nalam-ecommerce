@@ -75,7 +75,7 @@ export default function AddressModal({ isOpen, onClose, onSave, existingAddresse
         updatedAddresses = [...existingAddresses, formData]
       }
 
-      const res = await fetch('http://localhost:3000/user', {
+      const res = await fetch('https://nalam-grocery.onrender.com/user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
