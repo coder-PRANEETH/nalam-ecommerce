@@ -11,7 +11,7 @@ serverurl = "mongodb://localhost:27017/test";
 
 const app = express();
 const PORT = process.env.PORT || 4000 ;
-const MONGO_URL = process.env.MONGO_URL || "mongodb://localhost:27017/test";
+const MONGO_URL = process.env.MONGO_URL ;
 const JWT_SECRET = process.env.JWT_SECRET || "nalam_jwt_secret";
 
 // ─── Email Configuration (Gmail SMTP) ──────────────────────────────────────
@@ -400,14 +400,11 @@ app.delete("/user", authenticate, async (req, res) => {
 });
 
 // ─── Start ───────────────────────────────────────────────────────────────────
-mongoose
-  .connect(MONGO_URL)
-  .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error("MongoDB connection error:", error);
-  });
+mongoose.connect(MONGO_URL)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(err => console.error("MongoDB connection error:", err));
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
