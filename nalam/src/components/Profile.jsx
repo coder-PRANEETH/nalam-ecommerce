@@ -365,7 +365,6 @@ export default function Profile() {
                       <span className="order-items">{order.quantity} item{order.quantity > 1 ? 's' : ''}</span>
                       <span className="order-total">₹{order.totalPrice.toFixed(2)}</span>
                       <span className={`order-status ${STATUS_COLOR[order.status] ?? ''}`}>{order.status}</span>
-                      <button className="order-view-btn" onClick={() => navigate('/product')}>View</button>
                     </div>
                   ))}
                 </div>

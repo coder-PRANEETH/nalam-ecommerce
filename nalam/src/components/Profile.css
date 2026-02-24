@@ -474,6 +474,7 @@
   padding: 3px 10px;
   border-radius: 20px;
   display: inline-block;
+  text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }

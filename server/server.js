@@ -404,6 +404,45 @@ app.get("/products", async (req, res) => {
   }
 });
 
+// ─── GET /admin/products (protected, admin) ──────────────────────────────────
+app.get("/admin/products", authenticate, adminOnly, async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ─── PUT /admin/products/:id (protected, admin) ───────────────────────────────
+app.put("/admin/products/:id", authenticate, adminOnly, async (req, res) => {
+  try {
+    const { name, description, originalPrice, discountedPrice, stockLeft, category } = req.body;
+
+    const updateFields = {};
+    if (name !== undefined) updateFields.name = name;
+    if (description !== undefined) updateFields.description = description;
+    if (originalPrice !== undefined) updateFields.originalPrice = originalPrice;
+    if (discountedPrice !== undefined) updateFields.discountedPrice = discountedPrice;
+    if (stockLeft !== undefined) updateFields.stockLeft = stockLeft;
+    if (category !== undefined) updateFields.category = category;
+
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { $set: updateFields },
+      { new: true, runValidators: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    res.json({ message: "Product updated successfully", product });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ─── PUT /orders/:id (protected) ────────────────────────────────────────────
 app.put("/orders/:id", authenticate, async (req, res) => {
   const { id } = req.params;
