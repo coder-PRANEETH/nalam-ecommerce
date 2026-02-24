@@ -414,6 +414,31 @@ app.get("/admin/products", authenticate, adminOnly, async (req, res) => {
   }
 });
 
+// ─── POST /admin/products (protected, admin) ─────────────────────────────────
+app.post("/admin/products", authenticate, adminOnly, async (req, res) => {
+  try {
+    const { productId, name, category, description, originalPrice, discountedPrice, image, stockLeft } = req.body;
+
+    if (!productId || !name || !category || !description || originalPrice === undefined || discountedPrice === undefined || !image || stockLeft === undefined) {
+      return res.status(400).json({ error: "All required fields must be provided" });
+    }
+
+    const existing = await Product.findOne({ productId });
+    if (existing) {
+      return res.status(409).json({ error: "Product with this ID already exists" });
+    }
+
+    const product = new Product({
+      productId, name, category, description, originalPrice, discountedPrice,image, coverImage: `/cover/${image}`, stockLeft
+    });
+    const saved = await product.save();
+
+    res.status(201).json({ message: "Product created successfully", product: saved });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 // ─── PUT /admin/products/:id (protected, admin) ───────────────────────────────
 app.put("/admin/products/:id", authenticate, adminOnly, async (req, res) => {
   try {

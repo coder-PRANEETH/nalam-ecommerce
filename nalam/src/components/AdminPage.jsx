@@ -32,6 +32,11 @@ export default function AdminPage() {
   const [popupMsg, setPopupMsg]   = useState('')
   const [popupType, setPopupType] = useState('success')
   const [editForm, setEditForm]   = useState({})
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [addForm, setAddForm] = useState({
+    productId: '', name: '', category: '', description: '',
+    originalPrice: '', discountedPrice: '', image: '', stockLeft: ''
+  })
   const navigate = useNavigate()
   const token = localStorage.getItem('token')
 
@@ -121,6 +126,38 @@ export default function AdminPage() {
       setProducts(prev => prev.map(p => p._id === productId ? data.product : p))
       setSelected(data.product)
       setPopupMsg('Product updated successfully')
+      setPopupType('success')
+    } catch (err) {
+      setPopupMsg(err.message)
+      setPopupType('error')
+    } finally {
+      setUpdating(false)
+    }
+  }
+
+  async function addProduct() {
+    setUpdating(true)
+    try {
+      const payload = {
+        ...addForm,
+        originalPrice: parseFloat(addForm.originalPrice),
+        discountedPrice: parseFloat(addForm.discountedPrice),
+        stockLeft: parseInt(addForm.stockLeft),
+      }
+      const res = await fetch(`${API}/admin/products`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to add product')
+      setProducts(prev => [data.product, ...prev])
+      setShowAddForm(false)
+      setAddForm({ productId: '', name: '', category: '', description: '', originalPrice: '', discountedPrice: '', image: '', stockLeft: '' })
+      setPopupMsg('Product added successfully')
       setPopupType('success')
     } catch (err) {
       setPopupMsg(err.message)
@@ -256,9 +293,69 @@ export default function AdminPage() {
             </div>
           )}
 
+          {/* Add Product Modal */}
+          {showAddForm && (
+            <div className="add-product-overlay" onClick={() => setShowAddForm(false)}>
+              <div className="add-product-modal" onClick={e => e.stopPropagation()}>
+                <div className="detail-header">
+                  <h3>Add New Product</h3>
+                  <button className="detail-close" onClick={() => setShowAddForm(false)}>✕</button>
+                </div>
+                <div className="add-product-form">
+                  <div className="detail-section">
+                    <h4>Product ID</h4>
+                    <input type="text" className="edit-input" placeholder="e.g. PROD-001" value={addForm.productId} onChange={e => setAddForm({...addForm, productId: e.target.value})} />
+                  </div>
+                  <div className="detail-section">
+                    <h4>Name</h4>
+                    <input type="text" className="edit-input" placeholder="Product name" value={addForm.name} onChange={e => setAddForm({...addForm, name: e.target.value})} />
+                  </div>
+                  <div className="detail-section">
+                    <h4>Category</h4>
+                    <input type="text" className="edit-input" placeholder="e.g. Nuts, Spices" value={addForm.category} onChange={e => setAddForm({...addForm, category: e.target.value})} />
+                  </div>
+                  <div className="detail-section">
+                    <h4>Description</h4>
+                    <textarea className="edit-input" rows="3" placeholder="Min 20 characters" value={addForm.description} onChange={e => setAddForm({...addForm, description: e.target.value})} />
+                  </div>
+                  <div className="detail-section">
+                    <div className="price-grid">
+                      <div>
+                        <h4>Original Price</h4>
+                        <input type="number" className="edit-input" placeholder="0" value={addForm.originalPrice} onChange={e => setAddForm({...addForm, originalPrice: e.target.value})} />
+                      </div>
+                      <div>
+                        <h4>Discounted Price</h4>
+                        <input type="number" className="edit-input" placeholder="0" value={addForm.discountedPrice} onChange={e => setAddForm({...addForm, discountedPrice: e.target.value})} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="detail-section">
+                    <h4>Image URL</h4>
+                    <input type="text" className="edit-input" placeholder="product.jpg" value={addForm.image} onChange={e => setAddForm({...addForm, image: e.target.value})} />
+                  </div>
+                  
+                  <div className="detail-section">
+                    <h4>Stock Left</h4>
+                    <input type="number" className="edit-input" placeholder="0" value={addForm.stockLeft} onChange={e => setAddForm({...addForm, stockLeft: e.target.value})} />
+                  </div>
+                  <div className="detail-section">
+                    <button className="save-btn" disabled={updating} onClick={addProduct}>
+                      {updating ? 'Adding...' : 'Add Product'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Products Grid */}
           {showProducts && (
             <div className={`admin-products-panel ${selected ? 'shrunk mobile-hidden' : ''}`}>
+              <button className="add-product-btn" onClick={() => { setShowAddForm(true); setSelected(null) }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20"><path d="M12 5v14M5 12h14" /></svg>
+                Add Product
+              </button>
               {products.length === 0 ? (
                 <div className="admin-empty">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="64" height="64">
