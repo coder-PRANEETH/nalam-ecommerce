@@ -490,12 +490,7 @@
   color: #484f58;
 }
 
-/* ── Products Grid ── */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1.5rem;
-}
+
 
 .product-card {
   background: #161b22;
