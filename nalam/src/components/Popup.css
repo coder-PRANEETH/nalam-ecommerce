@@ -86,10 +86,11 @@
 /* Responsive */
 @media (max-width: 640px) {
   .popup {
-    top: 10px;
+    bottom: 10px;
     right: 10px;
     left: 10px;
-    max-width: none;
+    height: fit-content;
+    width: fit-content;
   }
 
   .popup-message {

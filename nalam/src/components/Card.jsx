@@ -74,7 +74,7 @@ function Card({ product }) {
     }
   }
   return (
-    <div className="card">
+    <div className="card" onClick={() => navigate('/product', { state: { product } })}>
       {/* Image */}
       <div className="card-image-wrapper">
         <img src={image} alt={name} className={`card-image ${category === "Oils" ? "" : "rota"}`} loading="lazy" />
@@ -106,10 +106,7 @@ function Card({ product }) {
               </>
             )}
           </div>
-          <button className="card-add-btn" onClick={() => navigate('/product', { state: { product } })}>
-
-            View
-          </button>
+         
         </div>
       </div>
       <Popup

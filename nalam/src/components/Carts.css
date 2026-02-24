@@ -367,6 +367,9 @@
   .cart-summary {
     width: 100%;
   }
+  .cart-table-wrapper {
+    width: 100%;
+  }
 
   .col-category {
     display: none;

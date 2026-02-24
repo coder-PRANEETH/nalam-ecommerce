@@ -255,7 +255,7 @@ export default function Profile() {
               ))}
             </nav>
 
-            <button className="profile-logout-btn" onClick={logout}>
+            <button className="profile-logout-btn lap" onClick={logout}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
                 <polyline points="16 17 21 12 16 7"/>
@@ -461,6 +461,14 @@ export default function Profile() {
 
         </main>
       </div>
+      <button className="profile-logout-btn mob" onClick={logout}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              Log Out
+            </button>
       <Footer />
 
       <AddressModal

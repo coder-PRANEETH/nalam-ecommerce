@@ -294,3 +294,9 @@
     stroke: #6b7280;
     flex-shrink: 0;
 }
+
+@media (max-width: 1000px){
+    .checkout{
+        display: none;
+    }
+}

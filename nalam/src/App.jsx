@@ -10,6 +10,8 @@ import Login from './components/Login'
 import ForgotPassword from './components/ForgotPassword'
 import ProtectedRoute from './components/ProtectedRoute'
 import LoginRoute from './components/LoginRoute'
+import AdminRoute from './components/AdminRoute'
+import AdminPage from './components/AdminPage'
 import Search from './components/search'
 
 function App() {
@@ -25,6 +27,7 @@ function App() {
         <Route path="/profile" element={<PageTransition><ProtectedRoute><Profile /></ProtectedRoute></PageTransition>} />
         <Route path="/login" element={<PageTransition><LoginRoute><Login /></LoginRoute></PageTransition>} />
         <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
+        <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
       </Routes>
     </AnimatePresence>
   )

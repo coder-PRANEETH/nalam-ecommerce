@@ -6,8 +6,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-const { User, Product } = require("./schema");
+const { User, Product, AdminOrder } = require("./schema");
 serverurl = "mongodb://localhost:27017/test";
+
+const ADMIN_EMAIL = "namagirienterprise@gmail.com";
+const ADMIN_NAME  = "nalam";
 
 const app = express();
 const PORT = process.env.PORT || 4000 ;
@@ -323,6 +326,74 @@ app.put("/user", authenticate, async (req, res) => {
   }
 });
 
+// ─── Admin Middleware ─────────────────────────────────────────────────────────
+function adminOnly(req, res, next) {
+  // Must be used after authenticate
+  const email = req.user.email;
+  User.findById(req.user.id).then(user => {
+    if (!user) return res.status(404).json({ error: "User not found" });
+    if (user.email === ADMIN_EMAIL || user.name.toLowerCase() === ADMIN_NAME) {
+      next();
+    } else {
+      res.status(403).json({ error: "Admin access only" });
+    }
+  }).catch(err => res.status(500).json({ error: err.message }));
+}
+
+// ─── GET /auth/check-admin (protected) ───────────────────────────────────────
+app.get("/auth/check-admin", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+    const isAdmin = user.email === ADMIN_EMAIL || user.name.toLowerCase() === ADMIN_NAME;
+    res.json({ isAdmin });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ─── GET /admin/orders (protected, admin) ────────────────────────────────────
+app.get("/admin/orders", authenticate, adminOnly, async (req, res) => {
+  try {
+    const { status } = req.query;
+    const filter = {};
+    if (status && status !== "All") filter.status = status;
+
+    const orders = await AdminOrder.find(filter)
+      .populate("product")
+      .sort({ orderedAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ─── PUT /admin/orders/:id (protected, admin) ────────────────────────────────
+app.put("/admin/orders/:id", authenticate, adminOnly, async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!status) return res.status(400).json({ error: "Status is required" });
+
+    const order = await AdminOrder.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true, runValidators: true }
+    ).populate("product");
+
+    if (!order) return res.status(404).json({ error: "Order not found" });
+
+    // Also update the status in the user's embedded orders array
+    await User.findOneAndUpdate(
+      { "orders._id": order.userOrderId },
+      { $set: { "orders.$.status": status } }
+    );
+
+    res.json({ message: "Order status updated", order });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ─── GET /products ───────────────────────────────────────────────────────────
 app.get("/products", async (req, res) => {
   try {
@@ -356,6 +427,65 @@ app.put("/orders/:id", authenticate, async (req, res) => {
 
     const updatedOrder = user.orders.id(id);
     res.json({ message: "Order updated successfully", order: updatedOrder });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ─── POST /orders/place (protected) ─────────────────────────────────────────
+app.post("/orders/place", authenticate, async (req, res) => {
+  try {
+    const { orders, addressIndex } = req.body;
+    // orders: [{ productId, quantity, totalPrice }]
+    if (!orders || !orders.length) {
+      return res.status(400).json({ error: "No orders provided" });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const address = user.addresses?.[addressIndex ?? 0] || user.addresses?.find(a => a.isDefault) || user.addresses?.[0] || {};
+
+    const placedOrders = [];
+
+    for (const item of orders) {
+      // Add to user's embedded orders
+      user.orders.push({
+        product: item.productId,
+        quantity: item.quantity,
+        totalPrice: item.totalPrice,
+        status: "Pending"
+      });
+      const userOrder = user.orders[user.orders.length - 1];
+
+      // Create in admin orders collection
+      const adminOrder = new AdminOrder({
+        userId: user._id,
+        userOrderId: userOrder._id,
+        userName: user.name,
+        userEmail: user.email,
+        userPhone: user.phone || "",
+        userAddress: {
+          label: address.label || "",
+          street: address.street || "",
+          city: address.city || "",
+          state: address.state || "",
+          pincode: address.pincode || ""
+        },
+        product: item.productId,
+        quantity: item.quantity,
+        totalPrice: item.totalPrice,
+        status: "Pending"
+      });
+      await adminOrder.save();
+      placedOrders.push(adminOrder);
+    }
+
+    // Clear cart after placing orders
+    user.cart = [];
+    await user.save();
+
+    res.status(201).json({ message: "Orders placed successfully", orders: placedOrders });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

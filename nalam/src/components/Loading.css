@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #000000 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #11ecde 0%, #300060 100%);
   position: relative;
   overflow: hidden;
 }
@@ -13,7 +13,7 @@
   position: absolute;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
   border-radius: 50%;
   animation: float 6s ease-in-out infinite;
   top: -100px;
@@ -32,82 +32,118 @@
   right: -50px;
 }
 
-.loading-spinner {
-  text-align: center;
-  position: relative;
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
   z-index: 10;
 }
 
-.spinner {
+.rings {
   position: relative;
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 30px;
+  width: 200px;
+  height: 200px;
+  perspective: 800px;
 }
 
-.spinner::before {
-  content: '';
+.ring {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 5px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
-  animation: spin 3s linear infinite;
+  border: 3px solid rgba(12, 87, 127, 0.284) ;
 }
 
-.spinner::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border: 5px solid transparent;
-  border-top: 5px solid white;
-  border-right: 5px solid rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  animation: spin 1.5s linear infinite reverse;
+.ring-1 {
+  animation: spin3d-1 1.8s backwards cubic-bezier(0.5, 0, 0.5, 1)  infinite, colorShift1 3s ease-in-out infinite;
 }
 
-.spinner > div {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: white;
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  margin-left: -5px;
-  margin-top: -5px;
-  animation: orbit 2s linear infinite;
-  transform-origin: 40px 40px;
+.ring-2 {
+  width: 75%;
+  height: 75%;
+  top: 12.5%;
+  left: 12.5%;
+  animation: spin3d-2 2.8s cubic-bezier(0.5, 0, 0.5, 1) infinite, colorShift2 3s ease-in-out infinite;
 }
 
-.spinner > div:nth-child(1) {
-  animation-delay: 0s;
+.ring-3 {
+  width: 50%;
+  height: 50%;
+  top: 25%;
+  left: 25%;
+  animation: spin3d-3 1.8s backwards linear infinite, colorShift3 3s ease-in-out infinite;
 }
 
-.spinner > div:nth-child(2) {
-  animation-delay: -0.5s;
-}
-
-.spinner > div:nth-child(3) {
-  animation-delay: -1s;
-}
-
-@keyframes spin {
+@keyframes spin3d-1 {
   0% {
-    transform: rotate(0deg);
+    transform:  rotateY(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform:  rotateY(360deg);
   }
 }
 
-@keyframes orbit {
+@keyframes spin3d-2 {
   0% {
-    transform: translate(40px, 0) rotate(0deg);
+    transform: rotateX(-35deg) rotateY(0deg);
   }
   100% {
-    transform: translate(40px, 0) rotate(360deg);
+    transform: rotateX(-35deg) rotateY(-360deg);
+  }
+}
+
+@keyframes spin3d-3 {
+  0% {
+    transform: rotateX(55deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(55deg) rotateZ(360deg);
+  }
+}
+
+@keyframes colorShift1 {
+  0%, 100% {
+    border-top-color: #ff6b6b;
+    border-right-color: rgba(255, 107, 107, 0.3);
+  }
+  33% {
+    border-top-color: #4ecdc4;
+    border-right-color: rgba(78, 205, 196, 0.3);
+  }
+  66% {
+    border-top-color: #ffe66d;
+    border-right-color: rgba(255, 230, 109, 0.3);
+  }
+}
+
+@keyframes colorShift2 {
+  0%, 100% {
+    border-left-color: #a8e6cf;
+    border-bottom-color: rgba(168, 230, 207, 0.3);
+  }
+  33% {
+    border-left-color: #ff8b94;
+    border-bottom-color: rgba(255, 139, 148, 0.3);
+  }
+  66% {
+    border-left-color: #88d8b0;
+    border-bottom-color: rgba(136, 216, 176, 0.3);
+  }
+}
+
+@keyframes colorShift3 {
+  0%, 100% {
+    border-top-color: #ffeaa7;
+    border-right-color: rgba(255, 234, 167, 0.3);
+  }
+  33% {
+    border-top-color: #dfe6e9;
+    border-right-color: rgba(223, 230, 233, 0.3);
+  }
+  66% {
+    border-top-color: #74b9ff;
+    border-right-color: rgba(116, 185, 255, 0.3);
   }
 }
 
@@ -122,51 +158,40 @@
 
 .loading-text {
   color: white;
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 500;
   margin: 0;
-  letter-spacing: 2px;
+  letter-spacing: 6px;
   text-transform: uppercase;
-  animation: fadeInOut 2s ease-in-out infinite,
-             slideUp 2s ease-in-out infinite;
+  opacity: 0.9;
+  animation: glow 2s ease-in-out infinite, textShimmer 3s ease-in-out infinite;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #ffe66d, #ff6b6b);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-@keyframes fadeInOut {
-  0%, 10% {
-    opacity: 0;
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+    opacity: 0.8;
   }
-  20%, 80% {
+  50% {
+    text-shadow: 0 0 20px rgba(78, 205, 196, 0.8);
     opacity: 1;
   }
-  90%, 100% {
-    opacity: 0;
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
   }
 }
 
-@keyframes slideUp {
-  0%, 10% {
-    transform: translateY(10px);
-  }
-  20%, 80% {
-    transform: translateY(0);
-  }
-  90%, 100% {
-    transform: translateY(-10px);
-  }
-}
-
-.loading-spinner::before {
-  content: '';
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  border: 2px solid transparent;
-  border-top: 2px solid rgba(255, 255, 255, 0.3);
-  border-right: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  animation: spin 4s linear infinite;
-  top: 50%;
-  left: 50%;
-  margin-left: -60px;
-  margin-top: -60px;
-}

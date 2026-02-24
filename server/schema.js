@@ -231,3 +231,63 @@ module.exports = {
   Product: mongoose.model("Product", productSchema),
   User: mongoose.model("User", userSchema),
 };
+
+
+// -----------------------------
+// ADMIN ORDER COLLECTION
+// -----------------------------
+const adminOrderSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+  userOrderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  userName: {
+    type: String,
+    required: true
+  },
+  userEmail: {
+    type: String,
+    required: true
+  },
+  userPhone: {
+    type: String,
+    default: ""
+  },
+  userAddress: {
+    label: String,
+    street: String,
+    city: String,
+    state: String,
+    pincode: String
+  },
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+    required: true
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1
+  },
+  totalPrice: {
+    type: Number,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ["Pending", "Shipped", "Delivered", "Cancelled"],
+    default: "Pending"
+  },
+  orderedAt: {
+    type: Date,
+    default: Date.now
+  }
+}, { timestamps: true });
+
+module.exports.AdminOrder = mongoose.model("AdminOrder", adminOrderSchema);

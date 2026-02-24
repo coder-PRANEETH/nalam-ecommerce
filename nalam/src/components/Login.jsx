@@ -79,7 +79,13 @@ export default function Login() {
       const data = await res.json()
       if (!res.ok) { setPopupMessage(data.error || 'Login failed'); setSubmitting(false); return }
       localStorage.setItem('token', data.token)
-      navigate('/')
+      // Redirect admin users to admin page
+      const user = data.user
+      if (user.email === 'namagirienterprise@gmail.com' || user.name?.toLowerCase() === 'nalam') {
+        navigate('/admin')
+      } else {
+        navigate('/')
+      }
     } catch {
       setPopupMessage('Network error. Please try again.')
       setSubmitting(false)

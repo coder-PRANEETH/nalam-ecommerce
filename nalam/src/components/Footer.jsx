@@ -22,7 +22,7 @@ export default function Footer() {
 
 
         {/* Customer */}
-        <div className="footer-col">
+        <div className=" lap footer-col">
           <h4 className="footer-col-title">Customer</h4>
           <ul className="footer-links">
             <li><Link to="/profile">My Account</Link></li>
@@ -34,7 +34,7 @@ export default function Footer() {
         </div>
 
         {/* Contact */}
-        <div className="footer-col">
+        <div className="mobi footer-col">
           <h4 className="footer-col-title">Contact Us</h4>
           <ul className="footer-contact">
             <li>
