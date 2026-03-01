@@ -25,6 +25,8 @@
 .profile-avatar-wrap {
   position: relative;
   margin-bottom: 1rem;
+  justify-content: center;
+    display: flex;
 }
 
 .profile-avatar-circle {
@@ -457,6 +459,12 @@
 
 .orders-row:last-child {
   border-bottom: none;
+}
+.profi{
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .orders-row:hover {

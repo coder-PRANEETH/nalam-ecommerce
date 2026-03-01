@@ -4,6 +4,7 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 import Popup from './Popup'
 import Loading from './Loading'
+import AddressModal from './AddressModal'
 import './Carts.css'
 
 export default function Carts() {
@@ -15,7 +16,13 @@ export default function Carts() {
   const [popupType, setPopupType] = useState('success')
   const [saving, setSaving] = useState(false)
   const [cartUpdated, setCartUpdated] = useState(false)
+  const [checkingOut, setCheckingOut] = useState(false)
+  const [userInfo, setUserInfo] = useState({})
+  const [userAddresses, setUserAddresses] = useState([])
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false)
+  const [pendingCheckout, setPendingCheckout] = useState(false)
   const navigate = useNavigate()
+  const API_BASE = 'https://nalam-grocery.onrender.com'
   
 
   useEffect(() => {
@@ -33,6 +40,8 @@ export default function Carts() {
       }),
     ])
       .then(([user, products]) => {
+        setUserInfo({ name: user.name, email: user.email, phone: user.phone })
+        setUserAddresses(user.addresses || [])
         const cart = user?.cart ?? []
 
         const productMap = {}
@@ -126,6 +135,110 @@ export default function Carts() {
   }
 
   const total = items.reduce((sum, item) => sum + item.price * item.qty, 0)
+  const grandTotal = +(total * 1.05).toFixed(2)
+
+  // ─── Razorpay Checkout ──────────────────────────────────────────────
+  async function handleCheckout() {
+    if (items.length === 0) return
+    if (cartUpdated) {
+      setPopupType('error')
+      setPopupMessage('Please save your cart changes before checkout.')
+      return
+    }
+
+    // Check if user has an address
+    if (!userAddresses || userAddresses.length === 0) {
+      setPendingCheckout(true)
+      setIsAddressModalOpen(true)
+      return
+    }
+
+    const token = localStorage.getItem('token')
+    setCheckingOut(true)
+
+    try {
+      // 1. Create Razorpay order on backend
+      const res = await fetch(`${API_BASE}/payment/create-order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ amount: grandTotal }),
+      })
+
+      if (!res.ok) throw new Error('Failed to create payment order')
+      const { orderId, keyId, amount, currency } = await res.json()
+
+      // 2. Open Razorpay checkout popup
+      const options = {
+        key: keyId,
+        amount,
+        currency,
+        name: 'Nalam Grocery',
+        description: `Order of ${items.length} item(s)`,
+        order_id: orderId,
+        handler: async function (response) {
+          // 3. Verify payment & place orders
+          try {
+            const verifyRes = await fetch(`${API_BASE}/payment/verify`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                orders: items.map(item => ({
+                  productId: item.id,
+                  quantity: item.qty,
+                  totalPrice: item.price * item.qty,
+                })),
+              }),
+            })
+
+            if (!verifyRes.ok) throw new Error('Payment verification failed')
+
+            setPopupType('success')
+            setPopupMessage('Payment successful! Your order has been placed.')
+            setItems([])
+            setOriginalItems([])
+          } catch (err) {
+            console.error('Verify error:', err)
+            setPopupType('error')
+            setPopupMessage('Payment verification failed. Contact support.')
+          }
+        },
+        prefill: {
+          name: userInfo.name || '',
+          email: userInfo.email || '',
+          contact: userInfo.phone || '',
+        },
+        theme: { color: '#4f8ef7' },
+        modal: {
+          ondismiss: function () {
+            setCheckingOut(false)
+          },
+        },
+      }
+
+      const rzp = new window.Razorpay(options)
+      rzp.on('payment.failed', function (resp) {
+        setPopupType('error')
+        setPopupMessage(`Payment failed: ${resp.error.description}`)
+        setCheckingOut(false)
+      })
+      rzp.open()
+    } catch (err) {
+      console.error('Checkout error:', err)
+      setPopupType('error')
+      setPopupMessage('Could not initiate payment. Please try again.')
+    } finally {
+      setCheckingOut(false)
+    }
+  }
 
   if (loading) return <Loading />
 
@@ -238,7 +351,13 @@ export default function Carts() {
               <span>₹{(total * 1.05).toFixed(2)}</span>
             </div>
 
-            <button className="cart-checkout-btn">Proceed to Checkout</button>
+            <button
+              className="cart-checkout-btn"
+              onClick={handleCheckout}
+              disabled={checkingOut || items.length === 0}
+            >
+              {checkingOut ? 'Processing...' : 'Proceed to Checkout'}
+            </button>
 
             <button className="cart-continue-btn" onClick={() => navigate('/')}>← Continue Shopping</button>
           </div>
@@ -255,8 +374,23 @@ export default function Carts() {
           </div>
         )}
       </div>
-
+        
       <Footer />
+
+      <AddressModal
+        isOpen={isAddressModalOpen}
+        onClose={() => { setIsAddressModalOpen(false); setPendingCheckout(false) }}
+        onSave={(updatedUser) => {
+          setUserAddresses(updatedUser.addresses || [])
+          setUserInfo({ name: updatedUser.name, email: updatedUser.email, phone: updatedUser.phone })
+          setIsAddressModalOpen(false)
+          if (pendingCheckout) {
+            setPendingCheckout(false)
+            setTimeout(() => handleCheckout(), 300)
+          }
+        }}
+        existingAddresses={userAddresses}
+      />
     </>
   )
 }

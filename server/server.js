@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const Razorpay = require("razorpay");
 const { User, Product, AdminOrder } = require("./schema");
 serverurl = "mongodb://localhost:27017/test";
 
@@ -16,6 +17,12 @@ const app = express();
 const PORT = process.env.PORT || 4000 ;
 const MONGO_URL = process.env.MONGO_URL ;
 const JWT_SECRET = process.env.JWT_SECRET || "nalam_jwt_secret";
+
+// ─── Razorpay Instance ──────────────────────────────────────────────────────
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 // ─── Email Configuration (Gmail SMTP) ──────────────────────────────────────
 const transporter = nodemailer.createTransport({
@@ -593,6 +600,107 @@ app.delete("/user", authenticate, async (req, res) => {
     }
     res.json({ message: "Account deleted successfully" });
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ─── POST /payment/create-order (protected) ────────────────────────────────
+app.post("/payment/create-order", authenticate, async (req, res) => {
+  try {
+    const { amount } = req.body; // amount in rupees
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: "Valid amount is required" });
+    }
+
+    const options = {
+      amount: Math.round(amount * 100), // Razorpay expects paise
+      currency: "INR",
+      receipt: `receipt_${Date.now()}`,
+    };
+
+    const order = await razorpay.orders.create(options);
+    res.json({
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      keyId: process.env.RAZORPAY_KEY_ID,
+    });
+  } catch (error) {
+    console.error("Razorpay create order error:", error);
+    res.status(500).json({ error: "Failed to create payment order" });
+  }
+});
+
+// ─── POST /payment/verify (protected) ───────────────────────────────────────
+app.post("/payment/verify", authenticate, async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, orders, addressIndex } = req.body;
+
+    // Verify signature
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body)
+      .digest("hex");
+
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({ error: "Payment verification failed" });
+    }
+
+    // Payment verified — now place the orders
+    if (!orders || !orders.length) {
+      return res.status(400).json({ error: "No orders provided" });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    const address = user.addresses?.[addressIndex ?? 0] || user.addresses?.find(a => a.isDefault) || user.addresses?.[0] || {};
+
+    const placedOrders = [];
+
+    for (const item of orders) {
+      user.orders.push({
+        product: item.productId,
+        quantity: item.quantity,
+        totalPrice: item.totalPrice,
+        status: "Pending",
+      });
+      const userOrder = user.orders[user.orders.length - 1];
+
+      const adminOrder = new AdminOrder({
+        userId: user._id,
+        userOrderId: userOrder._id,
+        userName: user.name,
+        userEmail: user.email,
+        userPhone: user.phone || "",
+        userAddress: {
+          label: address.label || "",
+          street: address.street || "",
+          city: address.city || "",
+          state: address.state || "",
+          pincode: address.pincode || "",
+        },
+        product: item.productId,
+        quantity: item.quantity,
+        totalPrice: item.totalPrice,
+        status: "Pending",
+      });
+      await adminOrder.save();
+      placedOrders.push(adminOrder);
+    }
+
+    // Clear cart
+    user.cart = [];
+    await user.save();
+
+    res.status(201).json({
+      message: "Payment verified & orders placed successfully",
+      paymentId: razorpay_payment_id,
+      orders: placedOrders,
+    });
+  } catch (error) {
+    console.error("Payment verify error:", error);
     res.status(500).json({ error: error.message });
   }
 });

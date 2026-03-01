@@ -4,6 +4,7 @@ import Navbar from './Navbar'
 import ProductView from './productview'
 import Footer from './Footer'
 import AddressModal from './AddressModal'
+import Popup from './Popup'
 import { useLocation } from 'react-router-dom'
 
 export default function ProductPage() {
@@ -12,6 +13,11 @@ export default function ProductPage() {
   const [user, setUser] = useState(null)
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false)
   const [addressToEdit, setAddressToEdit] = useState(null)
+  const [checkingOut, setCheckingOut] = useState(false)
+  const [popupMessage, setPopupMessage] = useState('')
+  const [popupType, setPopupType] = useState('success')
+  const [pendingCheckout, setPendingCheckout] = useState(false)
+  const API_BASE = 'https://nalam-grocery.onrender.com'
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -34,10 +40,119 @@ export default function ProductPage() {
     setUser(updatedUser)
   }
 
+  const grandTotal = +((product?.discountedPrice || 0) * 1.05).toFixed(2)
+
+  async function handleCheckout() {
+    if (!product) return
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setPopupType('error')
+      setPopupMessage('Please log in to proceed with payment.')
+      return
+    }
+
+    // Check if user has an address
+    if (!user?.addresses || user.addresses.length === 0) {
+      setPendingCheckout(true)
+      setIsAddressModalOpen(true)
+      return
+    }
+
+    setCheckingOut(true)
+
+    try {
+      // 1. Create Razorpay order
+      const res = await fetch(`${API_BASE}/payment/create-order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ amount: grandTotal }),
+      })
+
+      if (!res.ok) throw new Error('Failed to create payment order')
+      const { orderId, keyId, amount, currency } = await res.json()
+
+      // 2. Open Razorpay checkout popup
+      const options = {
+        key: keyId,
+        amount,
+        currency,
+        name: 'Nalam Grocery',
+        description: product.name,
+        order_id: orderId,
+        handler: async function (response) {
+          // 3. Verify payment & place order
+          try {
+            const verifyRes = await fetch(`${API_BASE}/payment/verify`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                orders: [{
+                  productId: product._id,
+                  quantity: 1,
+                  totalPrice: product.discountedPrice,
+                }],
+              }),
+            })
+
+            if (!verifyRes.ok) throw new Error('Payment verification failed')
+
+            setPopupType('success')
+            setPopupMessage('Payment successful! Your order has been placed.')
+          } catch (err) {
+            console.error('Verify error:', err)
+            setPopupType('error')
+            setPopupMessage('Payment verification failed. Contact support.')
+          }
+        },
+        prefill: {
+          name: user?.name || '',
+          email: user?.email || '',
+          contact: user?.phone || '',
+        },
+        theme: { color: '#5df74f' },
+        modal: {
+          ondismiss: function () {
+            setCheckingOut(false)
+          },
+        },
+      }
+
+      const rzp = new window.Razorpay(options)
+      rzp.on('payment.failed', function (resp) {
+        setPopupType('error')
+        setPopupMessage(`Payment failed: ${resp.error.description}`)
+        setCheckingOut(false)
+      })
+      rzp.open()
+    } catch (err) {
+      console.error('Checkout error:', err)
+      setPopupType('error')
+      setPopupMessage('Could not initiate payment. Please try again.')
+    } finally {
+      setCheckingOut(false)
+    }
+  }
+
   return (
     <>
     <Navbar />
     <div className="navbar-offset" />
+
+    <Popup
+      message={popupMessage}
+      type={popupType}
+      onClose={() => setPopupMessage('')}
+    />
+
     <div className="product-page">
     <ProductView product={product}/>
       <div className="checkout">
@@ -99,7 +214,13 @@ export default function ProductPage() {
           <span>₹{((product?.discountedPrice || 0) + ((product?.discountedPrice || 0) * 0.05)).toFixed(2)}</span>
         </div>
 
-        <button className="checkout-button">Proceed to Payment</button>
+        <button
+          className="checkout-button"
+          onClick={handleCheckout}
+          disabled={checkingOut}
+        >
+          {checkingOut ? 'Processing...' : 'Proceed to Payment'}
+        </button>
 
         <p className="checkout-secure">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -168,8 +289,16 @@ export default function ProductPage() {
 
     <AddressModal
       isOpen={isAddressModalOpen}
-      onClose={() => { setIsAddressModalOpen(false); setAddressToEdit(null) }}
-      onSave={handleAddressSaved}
+      onClose={() => { setIsAddressModalOpen(false); setAddressToEdit(null); setPendingCheckout(false) }}
+      onSave={(updatedUser) => {
+        handleAddressSaved(updatedUser)
+        setIsAddressModalOpen(false)
+        setAddressToEdit(null)
+        if (pendingCheckout) {
+          setPendingCheckout(false)
+          setTimeout(() => handleCheckout(), 300)
+        }
+      }}
       existingAddresses={user?.addresses || []}
       addressToEdit={addressToEdit}
     />
