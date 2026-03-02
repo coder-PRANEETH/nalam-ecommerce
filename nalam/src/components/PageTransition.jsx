@@ -29,6 +29,7 @@ export default function PageTransition({ children }) {
       animate="visible"
       exit="exit"
       variants={pageVariants}
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
     >
       {children}
     </motion.div>

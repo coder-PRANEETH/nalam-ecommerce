@@ -154,7 +154,16 @@ export default function ProductPage() {
     />
 
     <div className="product-page">
+      <>
     <ProductView product={product}/>
+    <button
+          className="checkout-button pay mob"
+          onClick={handleCheckout}
+          disabled={checkingOut}
+          >
+          {checkingOut ? 'Processing...' : 'Buy Now'}
+        </button>
+          </>
       <div className="checkout">
         <h2 className="checkout-title">Order Summary</h2>
 

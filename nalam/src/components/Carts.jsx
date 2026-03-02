@@ -375,7 +375,7 @@ export default function Carts() {
         )}
       </div>
         
-      <Footer />
+      <Footer  />
 
       <AddressModal
         isOpen={isAddressModalOpen}

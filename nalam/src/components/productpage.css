@@ -7,7 +7,9 @@
     width: 70%;
 }
 .checkout{
-    width: 30%;
+    margin-top: 20px;
+    width: 26%;
+    margin-right: 20px;
     height: fit-content;
     padding: 1.5rem 1.5rem;
     background: #f9fafb;
@@ -19,7 +21,7 @@
 
 /* Title */
 .checkout-title {
-    font-size: 1.45rem;
+    font-size: 1.95rem;
     font-weight: 700;
     color: #111827;
     margin: 0 0 1.25rem;
@@ -40,7 +42,7 @@
 }
 
 .checkout-item-img {
-    width: 56px;
+    width: 86px;
     height: 56px;
     object-fit: cover;
     border-radius: 8px;
@@ -57,7 +59,7 @@
 }
 
 .checkout-item-name {
-    font-size: 0.85rem;
+    font-size: 1.85rem;
     font-weight: 600;
     color: #111827;
     white-space: nowrap;
@@ -80,49 +82,11 @@
 /* Divider */
 .checkout-divider {
     border: none;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid #898a8a70;
     margin: 1rem 0;
 }
 
-/* Promo */
-.checkout-promo {
-    display: flex;
-    gap: 0.5rem;
-}
 
-.checkout-promo-input {
-    flex: 1;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 0.82rem;
-    font-family: inherit;
-    outline: none;
-    background: #fff;
-    color: #111827;
-    transition: border-color 0.2s;
-}
-
-.checkout-promo-input:focus {
-    border-color: #6366f1;
-}
-
-.checkout-promo-btn {
-    padding: 0.5rem 1rem;
-    background: #111827;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-    font-family: inherit;
-}
-
-.checkout-promo-btn:hover {
-    background: #374151;
-}
 
 /* Breakdown rows */
 .checkout-breakdown {
@@ -135,7 +99,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.85rem;
+    font-size: 1.25rem;
     color: #374151;
 }
 
@@ -154,7 +118,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: #111827;
     margin-bottom: 1.25rem;
@@ -168,7 +132,7 @@
     color: #fff;
     border: none;
     border-radius: 10px;
-    font-size: 0.95rem;
+    font-size: 1.35rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
@@ -185,14 +149,14 @@
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
-    font-size: 0.75rem;
+    font-size: 1.15rem;
     color: #9ca3af;
     margin: 0.85rem 0 0;
 }
 
 .checkout-secure svg {
-    width: 13px;
-    height: 13px;
+    width: 22px;
+    height: 22px;
     stroke: #9ca3af;
 }
 
@@ -217,7 +181,7 @@
 }
 
 .checkout-address-title {
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #111827;
     margin: 0;
@@ -225,7 +189,7 @@
 }
 
 .checkout-address-edit {
-    font-size: 0.75rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: #6366f1;
     background: none;
@@ -298,5 +262,21 @@
 @media (max-width: 1000px){
     .checkout{
         display: none;
+    }
+    .pay{
+        height: fit-content;
+        width: fit-content;
+        margin-left: 40px;
+        background-color: rgb(255, 166, 0);
+        color: #000;
+        border: #000 solid 1px;
+        margin-bottom: 20px;
+    }
+    .product-page{
+        flex-direction: column;
+       
+    }
+    .product-view{
+        width: 100%;
     }
 }

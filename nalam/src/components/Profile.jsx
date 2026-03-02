@@ -16,7 +16,7 @@ const STATUS_COLOR = {
   Pending:    'status-processing',
 }
 
-const TABS = ['Overview', 'Orders', 'Addresses', 'Payment', 'Account']
+const TABS = ['Overview', 'Orders', 'Addresses']
 
 function formatDate(iso) {
   if (!iso) return '—'

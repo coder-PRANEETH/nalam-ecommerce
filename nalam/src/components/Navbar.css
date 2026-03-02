@@ -9,7 +9,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  height: 64px;
+  height: 84px;
   padding: 0 2rem;
   color: black;
   background-color: #ffffff;
@@ -35,8 +35,8 @@ svg{
 }
 
 .logo-icon {
-  width: 36px;
-  height: 36px;
+  width: 76px;
+  height: 76px;
   background: linear-gradient(135deg, #000000, #a78bfa);
   border-radius: 10px;
   display: flex;
@@ -50,7 +50,7 @@ svg{
 }
 
 .logo-text {
-  font-size: 1.25rem;
+  font-size: 1.85rem;
   font-weight: 700;
   color: #000000;
   letter-spacing: 0.5px;
@@ -69,16 +69,19 @@ svg{
   flex: 1;
   max-width: 480px;
   position: relative;
+  
 }
 
 .search-wrapper {
   position: relative;
   width: 100%;
+
   display: flex;
   align-items: center;
 }
 form{
   width: 100%;
+
 }
 .search-icon {
   position: absolute;
@@ -92,10 +95,11 @@ form{
 
 .search-input {
   width: 100%;
+  height: 100%;
   padding: 0.5rem 1rem 0.5rem 2.5rem;
   background: rgba(69, 94, 236, 0.213);
   border: 1px solid rgba(0, 0, 0, 0.239);
-  border-radius: 14px;
+  border-radius: 24px;
   color: rgba(255, 255, 255, 0.87);
   font-size: 0.9rem;
   font-family: inherit;
@@ -117,15 +121,15 @@ form{
 
 /* ===== Search Suggestions Dropdown ===== */
 .search-suggestions {
-  position: absolute;
+ 
   top: calc(100% + 8px);
-  left: 0;
-  right: 0;
+  width: 170%;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   max-height: 400px;
+  margin: auto;
   overflow-y: auto;
   z-index: 1001;
 }
@@ -133,6 +137,7 @@ form{
 .suggestion-item {
   display: flex;
   align-items: center;
+  height:180%;
   gap: 12px;
   padding: 10px 12px;
   border-bottom: 1px solid #f3f4f6;
@@ -165,7 +170,7 @@ form{
 }
 
 .suggestion-name {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: #333;
   white-space: nowrap;
@@ -212,8 +217,8 @@ form{
 }
 
 .nav-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
 }
 
@@ -225,6 +230,9 @@ form{
 
 .nav-btn:focus {
   outline: none;
+}
+.nav-btn span{
+  font-size: 1.2rem;
 }
 
 /* Cart badge */
@@ -275,8 +283,8 @@ form{
 }
 
 .profile-avatar {
-  width: 32px;
-  height: 32px;
+  width: 42px;
+  height: 42px;
   background: white;
   border-radius: 50%;
   display: flex;
@@ -292,8 +300,8 @@ form{
   transition: all 0.6s ease;
 }
 .navbar-logo img{
-  width: 36px;
-  height: 36px;
+  width:76px;
+  height: 76px;
   border-radius: 50%;
 }
 .navbar-logo:hover {
@@ -301,19 +309,14 @@ form{
 }
 
 .profile-avatar svg {
-  width: 18px;
-  height: 18px;
+  width: 28px;
+  height: 28px;
   color: #fff;
 }
 .profile-avatar:hover {
   background: rgba(100, 108, 255, 0.12);
 }
-.logo-text {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #000000;
-  letter-spacing: 0.5px;
-}
+
 .logo-link:hover .logo-text {
   color: greenyellow;
 }
@@ -325,7 +328,7 @@ form{
 
 /* ===== Page offset so content doesn't sit under the fixed navbar ===== */
 .navbar-offset {
-  height: 56px;
+  height:84px;
 }
 
 /* ===== Responsive ===== */
@@ -343,10 +346,8 @@ form{
     display: none;
   }
 
-  .navbar-search {
-    max-width: none;
-  }
-
+  
+ 
   .nav-btn span {
     display: none;
   }
@@ -354,13 +355,13 @@ form{
   .nav-btn {
     padding: 0.45rem;
   }
-
-  .nav-btn svg {
-    width: 22px;
-    height: 22px;
+  form{
+  height: 60%;
   }
-}
-
-@media (max-width: 480px) {
+  .nav-btn svg {
+    width: 32px;
+    height: 32px;
+  }
   
 }
+

@@ -100,10 +100,10 @@ function Card({ product }) {
           <div className="card-pricing">
             <span className="card-price">₹{price.toFixed(2)}</span>
             {originalPrice>price && (
-              <>
+              <div className="card-discount-wrapper">
                 <span className="card-original">${originalPrice.toFixed(2)}</span>
                 <span className="card-discount">-{discount}%</span>
-              </>
+              </div>
             )}
           </div>
          

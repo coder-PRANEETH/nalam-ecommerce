@@ -9,7 +9,7 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   border: 1px solid #f0f0f0;
   transition: padding 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
-  width: 240px;
+  width: 20%;
   flex-shrink: 0;
 }
 
@@ -42,25 +42,6 @@
   transform: scale(1.05) rotateZ(45deg);
 }
 
-/* Badge */
-.card-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 0.25rem 0.6rem;
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: #fff;
-  border-radius: 12px;
-  text-transform: uppercase;
-}
-
-.badge-sale        { background: #ef4444; }
-.badge-new         { background: #10b981; }
-.badge-bestseller  { background: #f59e0b; }
-.badge-top-rated   { background: #6366f1; }
-
-/* Wishlist button */
 
 /* ===== Body ===== */
 .card-body {
@@ -71,7 +52,7 @@
 }
 
 .card-category {
-  font-size: 0.7rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #177e2d;
   text-transform: uppercase;
@@ -79,7 +60,7 @@
 }
 
 .card-name {
-  font-size: 1.05rem;
+  font-size: 2.4375rem;
   font-weight: 600;
   color: #111827;
   margin: 0;
@@ -89,44 +70,7 @@
   text-overflow: ellipsis;
 }
 
-/* ===== Stars ===== */
-.card-stars {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  margin-top: 2px;
-}
 
-.star {
-  width: 13px;
-  height: 13px;
-}
-
-.star.filled polygon {
-  fill: #f5f50b;
-  stroke: #e9f50b;
-}
-
-
-
-.star.empty polygon {
-  fill: none;
-  stroke: #d1d5db;
-}
-
-.rating-value {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #374151;
-  margin-left: 3px;
-}
-
-.card-reviews {
-  font-size: 0.7rem;
-  color: #9ca3af;
-  margin-top: -2px;
-}
 
 /* ===== Footer ===== */
 .card-footer {
@@ -141,24 +85,25 @@
 .card-pricing {
   display: flex;
   align-items: baseline;
+  flex-direction: column;
   gap: 5px;
   flex-wrap: wrap;
 }
 
 .card-price {
-  font-size: 1.05rem;
+  font-size: 1.9375rem;
   font-weight: 700;
   color: #111827;
 }
 
 .card-original {
-  font-size: 0.8rem;
+  font-size: 1.25rem;
   color: #9ca3af;
   text-decoration: line-through;
 }
 
 .card-discount {
-  font-size: 0.7rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: #ef4444;
 }
@@ -173,7 +118,7 @@
   color: #fff;
   border: none;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.22s ease;
@@ -191,3 +136,23 @@
 }
 
 
+
+@media (max-width: 1000px) {
+  .card {
+    width: 90%;
+  }
+  .card-category {
+    font-size: 1.0625rem;
+  }
+  .card-name {
+    font-size: 1.8125rem; }
+  .card-price {
+    font-size: 1.8125rem;
+  }
+  .card-original {
+    font-size: 1.1875rem;
+  }
+  .card-discount {
+    font-size: 1.3125rem;}
+  
+}

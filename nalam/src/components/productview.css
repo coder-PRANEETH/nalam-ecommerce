@@ -21,27 +21,27 @@
   color: #fff;
   border: none;
   border-radius: 12px;
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .product-image {
-  width: 300px;
-  height: 300px;
+  width: 400px;
+  height: 400px;
   object-fit: cover;
   border-radius: 12px;
 }
 .product-price {
-  font-size: 1.25rem;
+  font-size: 1.5625rem;
   font-weight: 700;
   margin-left: 2px;
   color: #111827;
 }
 .ava{
   color: #44f618;
-  font-size: large;
+  font-size: x-large;
 }
 .avl{
   color: #ef4444;
@@ -57,14 +57,14 @@
   
 }
 .product-original{
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #6b7280;
   text-decoration: line-through;
   margin-right: 15px;
 }
 
 .product-discount{
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #ef4444;
   font-weight: 600;
 }
@@ -74,7 +74,7 @@
   padding: 8px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 1.25rem;
 
 }
 .product-quantity{
@@ -92,7 +92,7 @@
   background: #e5e7eb;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 1.25rem;
   cursor: pointer;
 }
 .product-image img{
@@ -100,3 +100,10 @@
   aspect-ratio: 1/1;
   width: 100%;
 }
+
+@media (max-width: 1000px) {
+  .product-view {
+    flex-direction: column;
+    width: 90%;
+  }
+  }

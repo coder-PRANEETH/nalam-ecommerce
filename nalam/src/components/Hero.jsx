@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Loading from './Loading'
 import './Hero.css'
@@ -8,6 +8,8 @@ export default function Hero() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [prevIndex, setPrevIndex] = useState(0)
   const [loading, setLoading] = useState(true)
+  const touchStartX = useRef(0)
+  const touchDragged = useRef(false)
   const navigate = useNavigate()
 
   // Fetch products on mount
@@ -39,6 +41,24 @@ export default function Hero() {
     return () => clearInterval(interval)
   }, [products.length, currentIndex])
 
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX
+    touchDragged.current = false
+  }, [])
+
+  const handleTouchEnd = useCallback((e) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      touchDragged.current = true
+      setPrevIndex(currentIndex)
+      if (diff > 0) {
+        setCurrentIndex(prev => (prev + 1) % products.length)
+      } else {
+        setCurrentIndex(prev => (prev - 1 + products.length) % products.length)
+      }
+    }
+  }, [currentIndex, products.length])
+
   if (loading) {
     return <Loading />
   }
@@ -55,6 +75,7 @@ export default function Hero() {
   const isNextSlide = currentIndex > prevIndex || (currentIndex === 0 && prevIndex > 0)
 
   function handleHeroClick() {
+    if (touchDragged.current) return
     navigate('/product', { state: { product: currentProduct } })
   }
 
@@ -65,7 +86,11 @@ export default function Hero() {
 
   return (
     <section className="hero">
-      <div className="hero-carousel">
+      <div
+        className="hero-carousel"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <img
           key={currentIndex}
           src={currentProduct.coverImage}

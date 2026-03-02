@@ -11,7 +11,7 @@
 
 
 .products-title {
-  font-size: 1.75rem;
+  font-size: 2.45rem;
   font-weight: 700;
   color: #111827;
   margin: 0 0 0.35rem;
@@ -19,7 +19,7 @@
 }
 
 .products-subtitle {
-  font-size: 0.95rem;
+  font-size: 1.95rem;
   color: #6b7280;
   margin: 0;
 }
@@ -31,4 +31,22 @@
   justify-content: center;
   align-items: flex-start;
   gap: 1.5rem;
+}
+@media (max-width: 1000px) {
+  .products-grid {
+    gap: 2rem;
+  }
+  
+.products-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.35rem;
+  margin-top: 30px;
+}
+.products-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+}
 }
