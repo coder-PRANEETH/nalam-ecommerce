@@ -60,7 +60,7 @@
 }
 
 .card-name {
-  font-size: 2.4375rem;
+  font-size: 1.4375rem;
   font-weight: 600;
   color: #111827;
   margin: 0;
@@ -91,7 +91,7 @@
 }
 
 .card-price {
-  font-size: 1.9375rem;
+  font-size: 1.5375rem;
   font-weight: 700;
   color: #111827;
 }
@@ -103,7 +103,7 @@
 }
 
 .card-discount {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #ef4444;
 }
@@ -145,7 +145,7 @@
     font-size: 1.0625rem;
   }
   .card-name {
-    font-size: 1.8125rem; }
+    font-size: 1.6125rem; }
   .card-price {
     font-size: 1.8125rem;
   }
