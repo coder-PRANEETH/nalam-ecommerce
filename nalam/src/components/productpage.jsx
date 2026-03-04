@@ -17,12 +17,12 @@ export default function ProductPage() {
   const [popupMessage, setPopupMessage] = useState('')
   const [popupType, setPopupType] = useState('success')
   const [pendingCheckout, setPendingCheckout] = useState(false)
-  const API_BASE = 'http://localhost:4000'
+  const API_BASE = 'https://nalam-grocery.onrender.com'
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
-      fetch('http://localhost:4000/user', {
+      fetch('https://nalam-grocery.onrender.com/user', {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then(res => res.ok ? res.json() : null)

@@ -41,7 +41,7 @@ export default function Profile() {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    fetch('http://localhost:4000/user', {
+    fetch('https://nalam-grocery.onrender.com/user', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -84,7 +84,7 @@ export default function Profile() {
     setSaving(true)
 
     try {
-      const res = await fetch('http://localhost:4000/user', {
+      const res = await fetch('https://nalam-grocery.onrender.com/user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export default function Profile() {
     const updatedAddresses = user.addresses.filter((_, idx) => idx !== addressIndex)
 
     try {
-      const res = await fetch('http://localhost:4000/user', {
+      const res = await fetch('https://nalam-grocery.onrender.com/user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ export default function Profile() {
 
     const token = localStorage.getItem('token')
     try {
-      const res = await fetch('http://localhost:4000/user', {
+      const res = await fetch('https://nalam-grocery.onrender.com/user', {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
