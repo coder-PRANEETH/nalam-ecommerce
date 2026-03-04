@@ -9,7 +9,7 @@ export default function AdminRoute({ children }) {
   useEffect(() => {
     if (!token) { setIsAdmin(false); return }
 
-    fetch('https://nalam-grocery.onrender.com/auth/check-admin', {
+    fetch('http://localhost:4000/auth/check-admin', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())

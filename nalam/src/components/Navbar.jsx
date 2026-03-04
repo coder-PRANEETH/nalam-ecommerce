@@ -14,7 +14,7 @@ function Navbar() {
 
   // Fetch products on component mount
   useEffect(() => {
-    fetch('https://nalam-grocery.onrender.com/products')
+    fetch('http://localhost:4000/products')
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error('Failed to fetch products:', err))
@@ -27,7 +27,7 @@ function Navbar() {
       return
     }
 
-    fetch('https://nalam-grocery.onrender.com/user', {
+    fetch('http://localhost:4000/user', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

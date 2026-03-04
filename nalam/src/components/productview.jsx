@@ -19,7 +19,7 @@ export default function ProductView({ product }) {
     setIsAdding(true)
 
     try {
-      const res = await fetch('https://nalam-grocery.onrender.com/user/cart', {
+      const res = await fetch('http://localhost:4000/user/cart', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

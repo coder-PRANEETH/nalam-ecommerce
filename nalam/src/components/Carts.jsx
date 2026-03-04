@@ -22,19 +22,19 @@ export default function Carts() {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false)
   const [pendingCheckout, setPendingCheckout] = useState(false)
   const navigate = useNavigate()
-  const API_BASE = 'https://nalam-grocery.onrender.com'
+  const API_BASE = 'http://localhost:4000'
   
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     Promise.all([
-      fetch('https://nalam-grocery.onrender.com/user', {
+      fetch('http://localhost:4000/user', {
         headers: { Authorization: `Bearer ${token}` },
       }).then(r => {
         if (!r.ok) throw new Error('Failed to fetch user')
         return r.json()
       }),
-      fetch('https://nalam-grocery.onrender.com/products').then(r => {
+      fetch('http://localhost:4000/products').then(r => {
         if (!r.ok) throw new Error('Failed to fetch products')
         return r.json()
       }),
@@ -103,7 +103,7 @@ export default function Carts() {
         _id: item.cartItemId,
       }))
 
-      const res = await fetch('https://nalam-grocery.onrender.com/user', {
+      const res = await fetch('http://localhost:4000/user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

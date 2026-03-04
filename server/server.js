@@ -18,6 +18,10 @@ const PORT = process.env.PORT || 4000 ;
 const MONGO_URL = process.env.MONGO_URL ;
 const JWT_SECRET = process.env.JWT_SECRET || "nalam_jwt_secret";
 
+// ─── Telegram Bot Configuration ─────────────────────────────────────────────
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+
 // ─── Razorpay Instance ──────────────────────────────────────────────────────
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -45,6 +49,36 @@ transporter.verify((error, success) => {
     console.log("Email service ready");
   }
 });
+
+// ─── Telegram Utility Function ──────────────────────────────────────────────
+async function sendTelegramNotification(message) {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.log("Telegram not configured, skipping notification");
+    return;
+  }
+
+  try {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: "HTML"
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Telegram API error:", errorData);
+    } else {
+      console.log("Telegram notification sent successfully");
+    }
+  } catch (error) {
+    console.error("Failed to send Telegram notification:", error.message);
+  }
+}
 
 // ─── Email Utility Function ─────────────────────────────────────────────────
 async function sendOTPEmail(email, otp) {
@@ -556,6 +590,7 @@ app.post("/orders/place", authenticate, async (req, res) => {
     user.cart = [];
     await user.save();
 
+   
     res.status(201).json({ message: "Orders placed successfully", orders: placedOrders });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -694,6 +729,38 @@ app.post("/payment/verify", authenticate, async (req, res) => {
     user.cart = [];
     await user.save();
 
+         // Send Telegram notification for new orders
+    try {
+      // Populate product details for notification
+      const populatedOrders = await AdminOrder.populate(placedOrders, { path: "product" });
+      
+      const orderItems = populatedOrders.map(o => 
+        `  • ${o.product?.name || "Product"} x${o.quantity} - ₹${o.totalPrice}`
+      ).join("\n");
+
+      const totalAmount = placedOrders.reduce((sum, o) => sum + o.totalPrice, 0);
+      const addressStr = address.street 
+        ? `${address.street}, ${address.city}, ${address.state} - ${address.pincode}`
+        : "No address provided";
+
+      const telegramMessage = `🛒 <b>New Order Received!</b>\n\n` +
+        `👤 <b>Customer:</b> ${user.name}\n` +
+        `📧 <b>Email:</b> ${user.email}\n` +
+        `📱 <b>Phone:</b> ${user.phone || "N/A"}\n` +
+        `📍 <b>Address:</b> ${addressStr}\n\n` +
+        `📦 <b>Items:</b>\n${orderItems}\n\n` +
+        `💰 <b>Total:</b> ₹${totalAmount}\n` +
+        `🕐 <b>Time:</b> ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`;
+
+      console.log("Sending Telegram notification...");
+      console.log("BOT_TOKEN:", TELEGRAM_BOT_TOKEN ? "Set" : "Missing");
+      console.log("CHAT_ID:", TELEGRAM_CHAT_ID ? "Set" : "Missing");
+      await sendTelegramNotification(telegramMessage);
+    } catch (telegramError) {
+      console.error("Telegram notification failed:", telegramError.message);
+    }
+
+
     res.status(201).json({
       message: "Payment verified & orders placed successfully",
       paymentId: razorpay_payment_id,
@@ -710,7 +777,7 @@ mongoose.connect(MONGO_URL)
   .then(() => console.log("Connected to MongoDB"))
   .catch(err => console.error("MongoDB connection error:", err));
 
-app.listen(PORT, () => {
+app.listen(4000, () => {
   console.log(`Server running on port ${PORT}`);
 });
 

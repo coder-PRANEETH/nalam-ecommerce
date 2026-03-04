@@ -4,7 +4,7 @@ import Loading from './Loading'
 import Popup from './Popup'
 import './AdminPage.css'
 
-const API = 'https://nalam-grocery.onrender.com'
+const API = 'http://localhost:4000'
 const STATUSES = ['All', 'Pending', 'Shipped', 'Delivered', 'Cancelled']
 
 const STATUS_COLOR = {

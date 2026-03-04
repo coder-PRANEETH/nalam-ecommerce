@@ -8,7 +8,7 @@ function Products({ searchQuery = "" }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    fetch("https://nalam-grocery.onrender.com/products")
+    fetch("http://localhost:4000/products")
     .then((res) => {
       if (!res.ok) throw new Error("Failed to fetch products");
       return res.json();
