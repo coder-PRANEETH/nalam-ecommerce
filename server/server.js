@@ -777,7 +777,7 @@ mongoose.connect(MONGO_URL)
   .then(() => console.log("Connected to MongoDB"))
   .catch(err => console.error("MongoDB connection error:", err));
 
-app.listen(4000, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
